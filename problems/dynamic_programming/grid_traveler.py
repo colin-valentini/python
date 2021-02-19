@@ -21,6 +21,6 @@ def get_number_of_ways(n, m, memo):
   # Reduce the problem into two subproblems:
   # (1) The number of solutions after moving right one cell
   # (2) The number of solutions after moving down one cell
-  memo[(n,m)] = get_number_of_ways(n,m-1) + get_number_of_ways(n-1,m)
+  memo[(n,m)] = get_number_of_ways(n, m-1, memo) + get_number_of_ways(n-1, m, memo)
   return memo[(n,m)]
   
