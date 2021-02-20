@@ -10,8 +10,8 @@ def how_sum(target, numbers):
       case of how_sum(target, [1,...]) where we would get [1,...,1] of length `m`)
   
   Space complexity:
-    - O(m) since we have at most `m` (m=target) stack frames (ex: how_sum(target, [1,...])), 
-      and each recursive stack could cost up to O(m) operations to do list copying
+    - O(m^2) since we have a memo table with at most `m` keys (m=target), each key
+      mapping to a list of length at most `m`
 
   >>> how_sum(7, [2, 3])
   [2, 2, 3]
