@@ -1,5 +1,5 @@
 
-def can_sum(target, numbers, memo={}):
+def can_sum(target, numbers):
   '''
   For a target integer value, and a list of positive integer numbers, returns
   whether or not the target can be achieved by summing a subset (with replacement)
