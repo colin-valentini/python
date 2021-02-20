@@ -9,14 +9,13 @@ def can_sum(target, numbers):
   and a_i is an element of numbers, and x_i is some integer scalar (1 <= i <= n)
 
   Time complexity:
-    - Best: O(1) => can_sum(0, [...]) or can_sum(target, [target,...])
-    - Worst: O(n) => no solution, check all subtargets, ex: can_sum(2k-1,[2]) 
-      for k >> 1
+    - O(n*m) since we will make `n` recursive calls in each recursion depth level
+      for which we have `m` (m=target) recursive levels in the worst case
+      where `numbers` contains 1
   
   Space complexity:
-    - Best: O(1) => can_sum(0, [...]) or can_sum(target, [target,...])
-    - Worst: O(target) => can_sum(target, [1,...]) which requires `target` # of 
-      frames on the call stack
+    - O(m) since, by example, can_sum(target, [1,...]) requires `m` (m=target) # of 
+      frames on the call stack in the worst case where `numbers` contains 1
 
   # Below returns True since 3 + 4 = 7 (also 7=7, and 1 * 7 = 7)
   >>> can_sum(7, [5, 3, 4, 7, 1])
