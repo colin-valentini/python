@@ -21,8 +21,8 @@ def can_sum(target, numbers, strategy=Strategy.Tabulation):
     return _can_sum_tabulative(target, numbers)
   elif strategy == Strategy.Tabulation:
     return _can_sum_recursive(target, numbers, {})
-  else:
-    raise KeyError(f'Invalid strategy: {strategy}')
+  
+  raise KeyError(f'Invalid strategy: {strategy}')
 
 def _can_sum_recursive(target, numbers, memo):
   '''
