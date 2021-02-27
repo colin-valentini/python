@@ -1,4 +1,4 @@
-# python-utils
+# python
 A mish mosh of Python code representing interesting functions, scripts, snippets, or problems that I've encountered
 
 ## Updating Python Version Locally
