@@ -1,5 +1,10 @@
+from enum import Enum, auto
 
-def can_sum(target, numbers):
+class Strategy(Enum):
+  Recursion = auto()
+  Tabulation = auto()
+
+def can_sum(target, numbers, strategy=Strategy.Tabulation):
   '''
   For a target integer value, and a list of positive integer numbers, returns
   whether or not the target can be achieved by summing a subset (with replacement)
@@ -8,25 +13,29 @@ def can_sum(target, numbers):
   I.e. Returns True if and only if a subset a_1 * x_1 + ... + a_n * x_n = target
   and a_i is an element of numbers, and x_i is some integer scalar (1 <= i <= n)
 
-  Time complexity:
-    - O(n*m) since we will make `n` recursive calls in each recursion depth level
-      for which we have `m` (m=target) recursive levels in the worst case
-      where `numbers` contains 1
-  
-  Space complexity:
-    - O(m) since, by example, can_sum(target, [1,...]) requires `m` (m=target) # of 
-      frames on the call stack in the worst case where `numbers` contains 1
-
   # Below returns True since 3 + 4 = 7 (also 7=7, and 1 * 7 = 7)
   >>> can_sum(7, [5, 3, 4, 7, 1])
   True
   '''
-  # We lean on another function as opposed to adding a default optional memo
-  # parameter to this function since Python will bind the default memo to the
-  # the function definition across subsequent calls!
-  return _can_sum_recursive(target, numbers, {})
+  if strategy == Strategy.Tabulation:
+    return _can_sum_tabulative(target, numbers)
+  elif strategy == Strategy.Tabulation:
+    return _can_sum_recursive(target, numbers, {})
+  else:
+    raise KeyError(f'Invalid strategy: {strategy}')
 
 def _can_sum_recursive(target, numbers, memo):
+  '''
+  Time complexity: O(n * m) for n = target, m = len(numbers)
+    * We make `n` recursive calls in each recursion depth level
+      for which we have `m` (m=target) recursive levels in the worst case
+      where `numbers` contains 1
+  
+  Space complexity: O(m) for n = target, m = len(numbers)
+    * In the worst case, we're asked to compute can_sum(target, [1,...]) which
+      requires m frames on the call stack for stack of branches that reduce by 1
+  '''
+
   # Simplest case (base case): Target is exactly equal to zero
   # in which case we can sum any (or all) elements of numbers zero
   # times to achieve the target
@@ -54,11 +63,38 @@ def _can_sum_recursive(target, numbers, memo):
   memo[target] = False  
   return False
 
-# A few test examples:
-print(f'can_sum(0, [1]): {can_sum(0, [1])}')
-print(f'can_sum(9, [3]): {can_sum(9, [3])}')
-print(f'can_sum(300, [7, 14]): {can_sum(300, [7, 14])}')
-print(f'can_sum(7, [2, 4]): {can_sum(7, [2, 4])}')
-print(f'can_sum(3, [2, 6, 8, 9]): {can_sum(3, [2, 6, 8, 9])}')
-print(f'can_sum(7, [5, 3, 4, 7, 1]): {can_sum(7, [5, 3, 4, 7, 1])}')
-print(f'can_sum(12, [1, 2, 6, 8, 9]): {can_sum(12, [1, 2, 6, 8, 9])}')
+def _can_sum_tabulative(target, numbers):
+  '''
+  Time complexity: O(n * m) for n = target, m = len(numbers)
+    * We're uing nested loops, the first with `n` iterations, the second with `m`
+  
+  Space complexity: O(n) for n = target, m = len(numbers)
+    * We have a table array with `n` values
+  '''
+  # Use a simple array to cache subproblem solutions
+  table = [False] * (target + 1)
+
+  # Base case: Always able to construct 0 from any set of numbers (choose none)
+  table[0] = True
+
+  # Induction: If any subTarget <= target is constructable, so is 
+  # subTarget + num for every num in numbers
+  for subTarget in range(target + 1):
+    if table[subTarget]:
+      for num in numbers:
+        superTarget = subTarget + num
+
+        # Guard against attempts out-of-bounds access attempts
+        if superTarget <= target:
+          table[superTarget] = True
+
+  return table[target]
+
+# Test cases:
+assert can_sum(0, [1]) == True
+assert can_sum(9, [3]) == True
+assert can_sum(300, [7, 14]) == False
+assert can_sum(7, [2, 4]) == False
+assert can_sum(3, [2, 6, 8, 9]) == False
+assert can_sum(7, [5, 3, 4, 7, 1]) == True
+assert can_sum(12, [1, 2, 6, 8, 9]) == True
