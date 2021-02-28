@@ -1,4 +1,10 @@
-def can_construct(target, words):
+from enum import Enum, auto
+
+class Strategy(Enum):
+  Recursion = auto()
+  Tabulation = auto()
+
+def can_construct(target, words, strategy=Strategy.Tabulation):
   '''
   Returns a bool value representing whether or not the given `target` string can be
   constructed using only words from the list `words` (with replacement)
@@ -16,7 +22,12 @@ def can_construct(target, words):
     - O(n^2) since:
       * 
   '''
-  return _can_construct_tabulative(target, words)
+  if strategy == Strategy.Tabulation:
+    return _can_construct_tabulative(target, words)
+  elif strategy == Strategy.Recursion:
+    return _can_construct_recursive(target, words, {})
+  
+  raise KeyError(f'Invalid strategy: {strategy}')
 
 def _can_construct_recursive(target, words, memo):
 
@@ -70,14 +81,15 @@ def _can_construct_tabulative(target, words):
         # target[2:] = 'cdef'
         # ...
         # target[N:] = ''
-        subTarget = target[i:]
-        if subTarget.startswith(word):
+        rest = target[i:]
+        if rest.startswith(word):
           table[i+len(word)] = True
 
   return table[len(target)]
 
-# Some test examples
-assert can_construct("abcdef", ["ab", "abc", "cd", "def", "abcd"]) == True
-assert can_construct("abcdef", ["ab", "abc", "cd", "def", "abcd"]) == True
-assert can_construct("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"]) == False
-assert can_construct("e" * 35 + "f", ["e" * i for i in range(1,8)]) == False
+for strategy in Strategy:
+  assert can_construct("abcdef", ["ab", "abc", "cd", "def", "abcd"], strategy) == True
+  assert can_construct("abcdef", ["ab", "abc", "cd", "def", "abcd"], strategy) == True
+  assert can_construct("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"], strategy) == False
+  assert can_construct("enteratpotentpot", ["a", "p", "ent", "enter", "ot", "o", "t"], strategy) == True
+  assert can_construct("e" * 35 + "f", ["e" * i for i in range(1,8)], strategy) == False

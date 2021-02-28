@@ -90,11 +90,11 @@ def _can_sum_tabulative(target, numbers):
 
   return table[target]
 
-# Test cases:
-assert can_sum(0, [1]) == True
-assert can_sum(9, [3]) == True
-assert can_sum(300, [7, 14]) == False
-assert can_sum(7, [2, 4]) == False
-assert can_sum(3, [2, 6, 8, 9]) == False
-assert can_sum(7, [5, 3, 4, 7, 1]) == True
-assert can_sum(12, [1, 2, 6, 8, 9]) == True
+for strategy in Strategy:
+  assert can_sum(0, [1], strategy) == True
+  assert can_sum(9, [3], strategy) == True
+  assert can_sum(300, [7, 14], strategy) == False
+  assert can_sum(7, [2, 4], strategy) == False
+  assert can_sum(3, [2, 6, 8, 9], strategy) == False
+  assert can_sum(7, [5, 3, 4, 7, 1], strategy) == True
+  assert can_sum(12, [1, 2, 6, 8, 9], strategy) == True

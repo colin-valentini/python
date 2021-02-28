@@ -97,8 +97,8 @@ def _best_sum_tabulative(target, numbers):
     
   return table[target]
 
-# Some test examples
-assert best_sum(8, [2, 3, 5]) == [3, 5]
-assert best_sum(7, [1, 2, 3]) == [1, 3, 3]
-assert best_sum(100, [1, 2, 5, 25, 8]) == [25, 25, 25, 25]
-assert best_sum(300, [1, 10, 30, 50, 100]) == [100, 100, 100]
+for strategy in Strategy:
+  assert best_sum(8, [2, 3, 5], strategy) == [3, 5]
+  assert best_sum(7, [1, 2, 3], strategy) == [1, 3, 3]
+  assert best_sum(100, [1, 2, 5, 25, 8], strategy) == [25, 25, 25, 25]
+  assert best_sum(300, [1, 10, 30, 50, 100], strategy) == [100, 100, 100]
