@@ -1,8 +1,4 @@
-from enum import Enum, auto
-
-class Strategy(Enum):
-  Recursion = auto()
-  Tabulation = auto()
+from classes.strategy import Strategy
 
 def how_sum(target, numbers, strategy=Strategy.Tabulation):
   '''

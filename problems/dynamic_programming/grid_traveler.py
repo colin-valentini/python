@@ -29,4 +29,4 @@ def get_number_of_ways(n, m, memo):
   memo[(n,m)] = get_number_of_ways(n, m-1, memo) + get_number_of_ways(n-1, m, memo)
   return memo[(n,m)]
 
-print(f'number_of_ways_to_bottom_right(n=18, m=18): {number_of_ways_to_bottom_right(18, 18)}')
+assert number_of_ways_to_bottom_right(18, 18) == 2333606220
