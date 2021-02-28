@@ -36,36 +36,44 @@ def _can_construct_recursive(target, words, memo):
 
 def _can_construct_tabulative(target, words):
   '''
-  Time complexity: O() for n = len(target), m = len(words)
-    * 
+  Time complexity: O(n^2 * m) for n = len(target), m = len(words)
+    * We check each consecutive substring (target[:0], target[:1],...,target[:i])
+      and check if target[:i] starts with one of our words which requires O(m)
+      checks per iteration, with a total of O(n) iterations
+    * We are also doing string character comparisons when we check if a word 
+      matches the prefix of our subtarget, which requires at most n comparisons
 
-  Space complexity: O()
+  Space complexity: O(n)
+    * We use a tabular array of size n to maintain solutions to subproblems
   '''
   # Use a table array to maintain solutions to subproblems, in this setup
-  # each value 'i' in the table corresponds to whether target[len(target)-i:] 
-  # can be constructed using just string from "words"
+  # each value 'i' in the table corresponds to whether target[:i] 
+  # can be constructed using just elements from "words"
   #
-  # Ex: target='hello', table[4] == True => 'ello' (target[5-4:]) can be 
+  # Ex: target='hello', table[2] == True => 'el' (target[:2]) can be 
   # constructed from elements of "words"
   table = [False] * (len(target) + 1)
   
-  # Base case: Empty string
+  # Base case: Empty string == target[:0], which is always constructable
   table[0] = True
 
-  # Induction case: If we can construct a subTarget (subTarget is a substring
-  # of target), then we can construct word + subTarget
+  # Induction case: If we can construct a subTarget (subTarget is a prefix
+  # of target), then we can construct subTarget + word for each word in words
   for i in range(len(target)+1):
-    subTarget = target[len(target)-i:]
+    # If the current position is reachable, we know we appending a word from
+    # the word bank is also reachable
     if table[i]:
       for word in words:
 
-        # Check if adding this word to the substring creates a match with
-        # the target at the same position, if so, udpate the table array
-        superTarget = word + subTarget
-        whatSuperTargetShouldBe = target[len(target)-len(superTarget):]
-        if superTarget == whatSuperTargetShouldBe:
-          table[len(superTarget)] = True
-  
+        # target[0:] = 'abcdef'
+        # target[1:] = 'bcdef'
+        # target[2:] = 'cdef'
+        # ...
+        # target[N:] = ''
+        subTarget = target[i:]
+        if subTarget.startswith(word):
+          table[i+len(word)] = True
+
   return table[len(target)]
 
 # Some test examples
