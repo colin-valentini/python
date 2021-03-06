@@ -2,10 +2,20 @@
 from classes.strategy import Strategy
 
 def binary_search(array, target, strategy=Strategy.Iteration, validate_sorted=False):
+  '''
+  The prot
+  '''
   if validate_sorted:
     if not _array_is_sorted(array):
       raise Exception('Input <array> is not in sorted order')
   
+  # Small shortcut if the target is completely out of the array's range, or the
+  # array itself is completely empty. NOTE: We return -1 if the array is empty
+  # to match Python's built-in `in` operator behavior where `1 in []` returns
+  # the not found value, but doesn't raise an exception
+  if not len(array) or target < array[0] or array[-1] < target:
+    return -1
+
   return _binary_search_iterative(array, target)
 
 def _binary_search_iterative(array, target):
