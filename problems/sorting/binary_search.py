@@ -6,7 +6,9 @@ def binary_search(array, target, strategy=Strategy.Iteration, validate_sorted=Fa
   The prototypical binary search algorithm implemented at a high level with the ability
   to toggle between iterative or recursive strategy
 
-  O(log(n)) time | O(1) space
+  Time and Space Complexity by Strategy:
+   * Iterative: O(log(n)) time | O(1) space
+   * Recursive: O(log(n)) time | O(log(n)) space
   '''
   if validate_sorted:
     if not _array_is_sorted(array):
