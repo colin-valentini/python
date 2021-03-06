@@ -3,7 +3,10 @@ from classes.strategy import Strategy
 
 def binary_search(array, target, strategy=Strategy.Iteration, validate_sorted=False):
   '''
-  The prot
+  The prototypical binary search algorithm implemented at a high level with the ability
+  to toggle between iterative or recursive strategy
+
+  O(log(n)) time | O(1) space
   '''
   if validate_sorted:
     if not _array_is_sorted(array):
@@ -16,7 +19,12 @@ def binary_search(array, target, strategy=Strategy.Iteration, validate_sorted=Fa
   if not len(array) or target < array[0] or array[-1] < target:
     return -1
 
-  return _binary_search_iterative(array, target)
+  if strategy == Strategy.Iteration:
+    return _binary_search_iterative(array, target)
+  elif strategy == Strategy.Recursion:
+    return _binary_search_recursive(array, target, 0, len(array)-1)
+  
+  raise KeyError(f'Invalid strategy: {strategy}')  
 
 def _binary_search_iterative(array, target):
   # Create a window from the start index of the array to the last index,
