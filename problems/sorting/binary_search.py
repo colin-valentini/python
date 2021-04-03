@@ -36,7 +36,7 @@ def _binary_search_iterative(array, target):
   while left <= right:
 
     mid = (left + right) // 2
-    leftVal, midVal, rightVal = array[left], array[mid], array[right]
+    midVal = array[mid]
 
     # If the midpoint is exaclty our target, we're done
     if midVal == target:
@@ -65,7 +65,7 @@ def _binary_search_recursive(array, target, left, right):
     return -1
   
   mid = (left + right) // 2
-  leftVal, midVal, rightVal = array[left], array[mid], array[right]
+  midVal = array[mid]
   if midVal == target:
     return mid
   elif target < midVal:
