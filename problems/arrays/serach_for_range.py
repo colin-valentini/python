@@ -5,7 +5,7 @@ def search_for_range(array, target):
   Given an array of sorted integers and a target integer, returns an
   index range within which the target is contained.
 
-  Runs in O(log(n)) time | O(log(n)) space
+  Runs in O(log(n)) time | O(1) space
   '''
   return RangeFinder(array, target).target_range()
 
@@ -24,41 +24,43 @@ class RangeFinder():
     return self.range_lower, self.range_upper
   
   def _binary_search(self, left, right, direction):
-    if direction != self.SearchDirection.Left and direction != self.SearchDirection.Right:
-      raise Exception(f'Invalid search direction: {direction}')
-    
-    # Base case: have completely searched through
-    if left > right:
-      return
-    
-    # Recursive case: binary search this window
-    mid = (left + right) // 2
+    self._check_direction(direction)
 
-    # Standard binary search protocol
-    if self.target < self.array[mid]:
-      self._binary_search(left, mid - 1, direction)
-    elif self.target > self.array[mid]:
-      self._binary_search(mid + 1, right, direction)
+    while left <= right:
+      mid = (left + right) // 2
 
-    # In the event that we find a match at the middle index, only search the window 
-    # in the direction specified
-    else:
-      # (1) Searching left window
-      if direction == self.SearchDirection.Left:
-        if mid > self.MIN_INDEX and self.array[mid - 1] == self.target:
-          self._binary_search(left, mid - 1, direction)
-        else:
-          self.range_lower = mid
-      # (2) Searching right window
-      elif direction == self.SearchDirection.Right:
-        if mid < self.MAX_INDEX and self.array[mid + 1] == self.target:
-          self._binary_search(mid + 1, right, direction)
-        else:
-          self.range_upper = mid
+      # Standard binary search protocol
+      if self.target < self.array[mid]:
+        right = mid - 1
+      elif self.target > self.array[mid]:
+        left = mid + 1
+
+      # In the event that we find a match at the middle index, only search the window 
+      # in the direction specified
+      else:
+        # (1) Searching left window
+        if direction == self.SearchDirection.Left:
+          if mid > self.MIN_INDEX and self.array[mid - 1] == self.target:
+            right = mid - 1
+          else:
+            self.range_lower = mid
+            return
+        
+        # (2) Searching right window
+        elif direction == self.SearchDirection.Right:
+          if mid < self.MAX_INDEX and self.array[mid + 1] == self.target:
+            left = mid + 1
+          else:
+            self.range_upper = mid
+            return
 
   class SearchDirection(Enum):
     Left = auto()
     Right = auto()
+
+  def _check_direction(self, direction):
+    if direction != self.SearchDirection.Left and direction != self.SearchDirection.Right:
+      raise Exception(f'Invalid search direction: {direction}')
 
 # Test cases
 assert search_for_range([5, 7, 7, 8, 8, 10], 5) == (0,0)
