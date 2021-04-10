@@ -4,6 +4,8 @@ def search_for_range(array, target):
   '''
   Given an array of sorted integers and a target integer, returns an
   index range within which the target is contained.
+
+  Runs in O(log(n)) time | O(log(n)) space
   '''
   return RangeFinder(array, target).target_range()
 
